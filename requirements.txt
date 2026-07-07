@@ -1,0 +1,4 @@
+opencv-python-headless==4.9.0.80
+pandas==2.2.2
+fireworks-ai==0.13.0
+pydantic==2.7.4

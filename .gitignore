@@ -1,0 +1,18 @@
+# Environments
+.env
+__pycache__/
+*.pyc
+
+# Virtual Environments
+venv/
+env/
+
+# IDEs
+.idea/
+
+# Hackathon I/O Folders
+/input/
+/output/
+
+# OS generated files
+.DS_Store

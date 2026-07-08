@@ -1,0 +1,23 @@
+# Virtual Environments
+.venv/
+venv/
+env/
+
+# Version Control
+.git/
+.gitignore
+
+# IDE Files
+.idea/
+
+# Python Cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Local Data (We mount these dynamically at runtime, do not bake them in)
+input/
+output/
+
+# Secrets
+.env

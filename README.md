@@ -25,13 +25,13 @@ FIREWORKS_MODEL_NAME=accounts/fireworks/models/qwen3p7-plus
 
 **3. Build and Run via Docker**
 \`\`\`bash
-# Build the image
-docker build -t caption-captain .
+# Build the image (use --platform linux/amd64 for Apple Silicon / Windows ARM)
+docker build --platform linux/amd64 -t caption-captain .
 
 # Run the container with volume mounts
-docker run --rm --env-file .env -v "${PWD}/input:/app/input" -v "${PWD}/output:/app/output" caption-captain
+docker run --rm --env-file .env -v "${PWD}/input:/input" -v "${PWD}/output:/output" caption-captain
 \`\`\`
-*The pipeline will read from `/app/input/tasks.json` and generate `/app/output/results.json`.*
+*The pipeline will read from `/input/tasks.json` and generate `/output/results.json`.*
 
 ---
 
@@ -59,8 +59,9 @@ To ensure the pipeline completes within the strict 10-minute timeout limit while
 CaptionCaptain/
 ├── src/
 │   ├── __init__.py
-│   ├── vision.py        # Frame extraction and compression logic
-│   ├── llm_engine.py    # VLM payload construction and Regex parsing
+│   ├── vision.py          # Frame extraction and compression logic
+│   ├── llm_engine.py      # VLM payload construction and Regex parsing
+│   └── data_pipeline.py   # Pydantic I/O validation for input/output schemas
 ├── input/
 │   └── tasks.json       # Target video URLs (mounted at runtime)
 ├── output/

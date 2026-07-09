@@ -5,6 +5,7 @@ __pycache__/
 
 # Virtual Environments
 venv/
+.venv/
 env/
 
 # IDEs
@@ -16,3 +17,4 @@ env/
 
 # OS generated files
 .DS_Store
+Participant Guide_ AMD Developer Hackathon (ACT II)-1.pdf

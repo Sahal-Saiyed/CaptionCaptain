@@ -12,26 +12,14 @@ load_dotenv()
 
 
 def load_input_tasks(input_path: str) -> list:
-    """Loads the execution tasks. Falls back to a robust mock sample if file missing."""
+    """Loads the execution tasks using strict absolute paths."""
     if os.path.exists(input_path):
         print(f"Loading input tasks from: {input_path}")
         with open(input_path, 'r', encoding='utf-8') as f:
             return json.load(f)
     else:
-        print(f"⚠️ Warning: {input_path} not found. Generating default hackathon evaluation sample...")
-        # Create input directory if missing
-        os.makedirs(os.path.dirname(input_path), exist_ok=True)
-
-        default_tasks = [
-            {
-                "video_id": "task_001",
-                "video_url": "https://storage.googleapis.com/amd-hackathon-clips/1860079-uhd_2560_1440_25fps.mp4",
-                "requested_styles": ["formal", "sarcastic", "humorous_tech", "humorous_non_tech"]
-            }
-        ]
-        with open(input_path, 'w', encoding='utf-8') as f:
-            json.dump(default_tasks, f, indent=4)
-        return default_tasks
+        print(f"⚠️ Warning: {input_path} not found. Ensure volume is mounted correctly.")
+        return []
 
 
 def main():
@@ -40,29 +28,32 @@ def main():
     print("🚀 CAPTAIN CAPTION: RUNTIME INITIALIZATION")
     print("==================================================")
 
-    # Define strict input and output routing paths
-    input_file = os.path.join("input", "tasks.json")
-    output_dir = "output"
+    # UPDATED: Use absolute paths exactly as requested by the evaluation server
+    input_file = "/input/tasks.json"
+    output_dir = "/output"
     output_file = os.path.join(output_dir, "results.json")
+
+    # Ensure the output directory exists
     os.makedirs(output_dir, exist_ok=True)
 
     # Initialize our pipeline objects
     tasks = load_input_tasks(input_file)
-    video_processor = VideoProcessor(target_frames=3, max_width=720)  # 3 frames balanced for speed/accuracy
+    video_processor = VideoProcessor(target_frames=3, max_width=720)
     caption_agent = CaptionAgent()
 
     final_output = []
 
     # Process tasks sequentially
     for idx, task in enumerate(tasks, 1):
-        video_id = task.get("video_id", f"unknown_{idx}")
+        # UPDATED: Use 'task_id' and 'styles' to match the PDF schema
+        task_id = task.get("task_id", f"unknown_{idx}")
         video_url = task.get("video_url")
-        requested_styles = task.get("requested_styles", ["formal"])
+        requested_styles = task.get("styles", ["formal", "sarcastic", "humorous_tech", "humorous_non_tech"])
 
-        print(f"\n[Task {idx}/{len(tasks)}] Processing Video ID: {video_id}")
+        print(f"\n[Task {idx}/{len(tasks)}] Processing Task ID: {task_id}")
 
         if not video_url:
-            print(f"❌ Skipping Task {video_id}: Missing video_url.")
+            print(f"❌ Skipping Task {task_id}: Missing video_url.")
             continue
 
         try:
@@ -75,20 +66,17 @@ def main():
             else:
                 captions = {style: "Pipeline Error: Could not extract frames." for style in requested_styles}
 
-            # Step 3: Package result object matching expected pipeline structures
+            # Step 3: UPDATED Payload matching exact expected output schema
             task_result = {
-                "video_id": video_id,
-                "video_url": video_url,
+                "task_id": task_id,
                 "captions": captions
             }
             final_output.append(task_result)
 
         except Exception as e:
-            print(f"💥 Critical crash caught during processing task {video_id}: {e}")
-            # Ensure the pipeline doesn't stop for other videos if one single URL crashes
+            print(f"💥 Critical crash caught during processing task {task_id}: {e}")
             final_output.append({
-                "video_id": video_id,
-                "video_url": video_url,
+                "task_id": task_id,
                 "captions": {style: f"Pipeline Exception: {str(e)}" for style in requested_styles}
             })
 

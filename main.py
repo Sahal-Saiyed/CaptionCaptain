@@ -29,7 +29,7 @@ def main():
     data_manager = DataManager(input_path=input_file, output_path=output_file)
     tasks = data_manager.load_tasks()
 
-    video_processor = VideoProcessor(target_frames=3, max_width=720)
+    video_processor = VideoProcessor(target_frames=8, max_width=720)
     caption_agent = CaptionAgent()
 
     final_output = []

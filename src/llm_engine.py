@@ -66,8 +66,8 @@ DO NOT think out loud. DO NOT explain your reasoning. Output absolutely NO text 
             response = fireworks.client.ChatCompletion.create(
                 model=self.model,
                 messages=messages,
-                temperature=0.7,
-                max_tokens=1024,  # Increased token limit so it doesn't get cut off
+                temperature=0.5,
+                max_tokens=1200,  # Increased token limit so it doesn't get cut off
             )
 
             raw_output = response.choices[0].message.content.strip()

@@ -9,8 +9,9 @@ from src.vision import VideoProcessor
 
 # Load environment variables (.env)
 load_dotenv()
-print("API:", os.getenv("FIREWORKS_API_KEY"))
-print("MODEL:", os.getenv("FIREWORKS_MODEL_NAME"))
+api_key = os.getenv("FIREWORKS_API_KEY")
+print("API loaded:", "Yes" if api_key else "No")
+print("Model:", os.getenv("FIREWORKS_MODEL_NAME"))
 
 def main():
     start_time = time.time()

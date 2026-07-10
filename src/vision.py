@@ -21,7 +21,7 @@ class VideoProcessor:
     def _frame_to_base64(self, frame) -> str:
         """Encodes an OpenCV frame to a base64 string."""
         # Compress the image to JPEG with 80% quality to further reduce payload size
-        success, buffer = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 80])
+        success, buffer = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 90])
         if not success:
             raise ValueError("Failed to encode frame to JPEG.")
 

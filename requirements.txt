@@ -2,3 +2,5 @@ opencv-python-headless
 fireworks-ai
 pydantic
 python-dotenv
+streamlit
+pillow

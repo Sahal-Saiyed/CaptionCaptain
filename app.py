@@ -184,7 +184,8 @@ if user_input:
         file_bytes = uploaded_file.read()
 
         # Save directly to the project folder to bypass Windows Temp folder permission problems
-        temp_path = "temp_upload.mp4"
+        fd, temp_path = tempfile.mkstemp(suffix=".mp4")
+        os.close(fd)
         with open(temp_path, "wb") as f:
             f.write(file_bytes)
 

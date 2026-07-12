@@ -7,7 +7,7 @@ env/
 .git/
 .gitignore
 
-# IDE Files
+# IDE
 .idea/
 
 # Python Cache
@@ -15,7 +15,19 @@ __pycache__/
 *.pyc
 *.pyo
 
-# Local Data (We mount these dynamically at runtime, do not bake them in)
+# Local runtime data
 input/
 output/
 
+# Streamlit UI (not needed for evaluator)
+app.py
+
+# UI assets (not needed for evaluator)
+CaptionCaptain_Cap_Icon.png
+CaptionCaptain_Cap_Logo.png
+CaptionCaptain_Logo.png
+CaptionCaptain_Logo_Base.png
+CaptionCaptain_Logo_Spinner.png
+
+# Documentation
+README.md

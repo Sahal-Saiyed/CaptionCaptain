@@ -67,7 +67,7 @@ DO NOT think out loud. DO NOT explain your reasoning. Output absolutely NO text 
                 model=self.model,
                 messages=messages,
                 temperature=0.5,
-                max_tokens=1200,  # Increased token limit so it doesn't get cut off
+                max_tokens=1500,  # Increased token limit so it doesn't get cut off
             )
 
             raw_output = response.choices[0].message.content.strip()

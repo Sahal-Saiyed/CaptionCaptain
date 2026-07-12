@@ -44,12 +44,13 @@ class VideoProcessor:
             cap.release()
             return []
 
-        # Calculate the exact frame numbers we want to grab
-        interval = math.floor(total_frames / self.target_frames)
-        target_frame_indices = [i * interval for i in range(self.target_frames)]
+        # Divide the video into equal segments and sample the center of each segment.
+        segment = total_frames / self.target_frames
 
-        # Ensure we don't accidentally ask for a frame beyond the video length
-        target_frame_indices = [min(idx, total_frames - 1) for idx in target_frame_indices]
+        target_frame_indices = [
+            min(int((i + 0.5) * segment), total_frames - 1)
+            for i in range(self.target_frames)
+        ]
 
         base64_frames = []
 

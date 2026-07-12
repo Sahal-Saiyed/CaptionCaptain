@@ -30,6 +30,16 @@ REQUIRED STYLES AND TONE EXAMPLES:
 3. "humorous_tech": Funny, with technology or programming references.
 4. "humorous_non_tech": Funny, everyday humour with no technical jargon.
 
+If a requested style is not listed above, infer its intended tone from the style name.
+
+Carefully observe the visual details across all provided frames before writing captions.
+
+Prefer concrete visual details (objects, actions, surroundings, colors, weather, expressions, and notable scene elements) over generic descriptions.
+
+Do not invent details that are not clearly visible.
+
+Every caption should describe the same observed scene, differing only in writing style.
+
 CRITICAL INSTRUCTION:
 You must return ONLY a valid JSON object. The keys must be exactly: "formal", "sarcastic", "humorous_tech", "humorous_non_tech".
 DO NOT think out loud. DO NOT explain your reasoning. Output absolutely NO text before or after the JSON object.
@@ -48,7 +58,12 @@ DO NOT think out loud. DO NOT explain your reasoning. Output absolutely NO text 
         content = [
             {
                 "type": "text",
-                "text": "Analyze these frames and output the JSON object with the requested captions.",
+                "text": (
+                    "Analyze these video frames.\n\n"
+                    f"Generate captions for the following requested styles:\n"
+                    f"{', '.join(requested_styles)}\n\n"
+                    "Return ONLY a valid JSON object whose keys exactly match these requested styles."
+                ),
             }
         ]
         for b64 in base64_frames:

@@ -2,6 +2,7 @@ import streamlit as st
 import os
 import re
 import tempfile
+import hashlib
 from dotenv import load_dotenv
 from src.vision import VideoProcessor
 from src.llm_engine import CaptionAgent
@@ -84,14 +85,18 @@ if len(st.session_state.messages) > 0:
 
     # 2. Floating Video Preview (Width pinned to 240px)
     if st.session_state.active_video:
-        vid_html = ""
+        # 🟢 Create a stable, unique ID for the current video to force the browser to reload it
+        vid_id = hashlib.md5(st.session_state.active_video.encode()).hexdigest()
+        vid_src = ""
+
         if st.session_state.active_video_is_url:
-            vid_html = f'<source src="{st.session_state.active_video}" type="video/mp4">'
+            vid_src = st.session_state.active_video
         elif os.path.exists(st.session_state.active_video):
             base64_vid = get_base64_file(st.session_state.active_video)
-            vid_html = f'<source src="data:video/mp4;base64,{base64_vid}" type="video/mp4">'
+            vid_src = f"data:video/mp4;base64,{base64_vid}"
 
-        if vid_html:
+        if vid_src:
+            # 🟢 Apply the unique ID and inject the src directly into the <video> tag
             st.markdown(
                 f"""
                 <style>
@@ -107,8 +112,7 @@ if len(st.session_state.messages) > 0:
                     animation: slideInFade 0.6s ease-out forwards;
                 }}
                 </style>
-                <video class="fixed-video" controls autoplay muted loop>
-                    {vid_html}
+                <video id="vid_{vid_id}" class="fixed-video" src="{vid_src}" controls autoplay muted loop>
                     Your browser does not support the video tag.
                 </video>
                 """,
@@ -324,9 +328,13 @@ if len(st.session_state.messages) > 0 and st.session_state.messages[-1]["role"] 
                         "captions": generated_captions
                     })
 
-                    # Clean up the local storage footprint safely
-                    if "video_path" in last_msg and os.path.exists("temp_upload.mp4"):
-                        os.remove("temp_upload.mp4")
+                    # 🟢 Smart Cleanup: Only delete old videos, NOT the currently active one
+                    if "video_path" in last_msg and os.path.exists(last_msg["video_path"]):
+                        if st.session_state.active_video != last_msg["video_path"]:
+                            try:
+                                os.remove(last_msg["video_path"])
+                            except Exception:
+                                pass
 
             except Exception as e:
                 if 'loading_placeholder' in locals():

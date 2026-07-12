@@ -53,6 +53,12 @@ if "active_video" not in st.session_state:
 if "active_video_is_url" not in st.session_state:
     st.session_state.active_video_is_url = False
 
+# Initialize style management
+if "available_styles" not in st.session_state:
+    st.session_state.available_styles = ["formal", "sarcastic", "humorous_tech", "humorous_non_tech"]
+if "selected_styles" not in st.session_state:
+    st.session_state.selected_styles = ["formal", "sarcastic", "humorous_tech", "humorous_non_tech"]
+
 # ==========================================
 # ⚓ FIXED FLOATING UI (Top Left: Logo + Video)
 # ==========================================
@@ -162,6 +168,38 @@ for message in st.session_state.messages:
                     st.markdown(
                         f'<div style="background-color: #F8F9FA; padding: 22px; border-radius: 8px; border-left: 4px solid #4F46E5; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-top: 0px !important; color: #1F2937; font-size: 15px; line-height: 1.6; font-weight: 400; white-space: pre-wrap;">{text.strip()}</div>',
                         unsafe_allow_html=True)
+
+# ==========================================
+# 🎛️ Inline UI: Style Configuration
+# ==========================================
+st.markdown("<br>", unsafe_allow_html=True)
+with st.expander("⚙️ Customize Caption Styles (Max 6)", expanded=False):
+    col_style_1, col_style_2 = st.columns([1, 2])
+
+    with col_style_1:
+        with st.form("add_style_form", clear_on_submit=True):
+            new_style = st.text_input("Add custom style:", placeholder="e.g., pirate, poetic")
+            add_submitted = st.form_submit_button("Add Style")
+
+            if add_submitted and new_style:
+                clean_style = new_style.strip().lower().replace(" ", "_")
+                if clean_style not in st.session_state.available_styles:
+                    st.session_state.available_styles.append(clean_style)
+                    # Automatically select it if we haven't hit the limit
+                    if len(st.session_state.selected_styles) < 6:
+                        st.session_state.selected_styles.append(clean_style)
+                    st.rerun()
+
+    with col_style_2:
+        st.session_state.selected_styles = st.multiselect(
+            "Active Styles:",
+            options=st.session_state.available_styles,
+            default=st.session_state.selected_styles,
+            max_selections=6
+        )
+
+        if not st.session_state.selected_styles:
+            st.warning("⚠️ Please select at least one style.")
 
 # ==========================================
 # 🚀 Pinned Native Chat Input
@@ -303,8 +341,13 @@ if len(st.session_state.messages) > 0 and st.session_state.messages[-1]["role"] 
                     st.error("Failed to parse video. Please verify the URL or ensure the file is not corrupted.")
                 else:
                     agent = CaptionAgent()
-                    styles = ["formal", "sarcastic", "humorous_tech", "humorous_non_tech"]
-                    generated_captions = agent.generate_captions(base64_frames, styles)
+
+                    # Fetch dynamically selected styles, fallback to 'formal' if empty
+                    active_styles = st.session_state.selected_styles
+                    if not active_styles:
+                        active_styles = ["formal"]
+
+                    generated_captions = agent.generate_captions(base64_frames, active_styles)
 
                     loading_placeholder.empty()
                     st.toast("Captions generated successfully!")

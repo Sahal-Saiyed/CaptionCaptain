@@ -291,7 +291,7 @@ if len(st.session_state.messages) > 0 and st.session_state.messages[-1]["role"] 
                             unsafe_allow_html=True
                         )
 
-                processor = VideoProcessor(target_frames=8, max_width=720)
+                processor = VideoProcessor(target_frames=8, max_width=1024)
                 base64_frames = processor.extract_base64_frames(video_source)
 
                 if not base64_frames:

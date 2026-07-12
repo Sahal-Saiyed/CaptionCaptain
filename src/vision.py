@@ -5,7 +5,7 @@ from typing import List
 
 
 class VideoProcessor:
-    def __init__(self, target_frames: int = 8, max_width: int = 720):
+    def __init__(self, target_frames: int = 8, max_width: int = 1024):
         self.target_frames = target_frames
         self.max_width = max_width
 

@@ -16,7 +16,7 @@ print("Model:", os.getenv("FIREWORKS_MODEL_NAME"))
 def main():
     start_time = time.time()
     print("=" * 50)
-    print("🚀 CAPTAIN CAPTION: RUNTIME INITIALIZATION")
+    print("🚀 CAPTION CAPTAIN: RUNTIME INITIALIZATION")
     print("=" * 50)
 
     # Absolute paths as required by the evaluation server
@@ -29,7 +29,7 @@ def main():
     data_manager = DataManager(input_path=input_file, output_path=output_file)
     tasks = data_manager.load_tasks()
 
-    video_processor = VideoProcessor(target_frames=8, max_width=720)
+    video_processor = VideoProcessor(target_frames=8, max_width=1024)
     caption_agent = CaptionAgent()
 
     final_output = []

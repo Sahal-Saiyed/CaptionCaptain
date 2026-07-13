@@ -151,6 +151,6 @@ This project is intended for educational and hackathon purposes.
 
 ---
 
-## 🙏 Acknowledgements
+## Acknowledgements
 
 Thanks to the hackathon organizers for providing the opportunity to build CaptionCaptain and explore AI-powered video caption generation.

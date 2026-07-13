@@ -45,13 +45,9 @@ CaptionCaptain/
 ├── .env
 │
 ├── src/
-│   ├── vision.py           # Video frame extraction
-│   ├── llm_engine.py       # AI caption generation
-│   └── data_pipeline.py    # Input/output handling
-│
-├── input/
-├── output/
-└── assets/
+    ├── vision.py           # Video frame extraction
+    ├── llm_engine.py       # AI caption generation
+    └── data_pipeline.py    # Input/output handling
 ```
 
 ---

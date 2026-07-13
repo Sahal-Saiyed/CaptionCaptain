@@ -367,7 +367,7 @@ if len(st.session_state.messages) > 0 and st.session_state.messages[-1]["role"] 
                     # Save to state history perfectly, exactly once
                     st.session_state.messages.append({
                         "role": "assistant",
-                        "content": "I've analyzed the video keyframes! Here are your custom captions:",
+                        "content": "I've analyzed the video! Here are your custom captions:",
                         "captions": generated_captions
                     })
 
